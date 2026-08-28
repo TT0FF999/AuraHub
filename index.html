@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura Hub - Tweaks iOS </title>
+  <title>Aura Hub - Tweaks iOS Liquid Glass</title>
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -114,7 +114,7 @@
       </button>
     </header>
 
-    <!-- Champ de recherche caché par défaut -->
+    <!-- Champ de recherche -->
     <div id="search-bar-container" class="hidden transition-all duration-300">
       <div class="relative">
         <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
@@ -132,22 +132,23 @@
       <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
       <div class="relative z-10 space-y-3">
         <span class="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-ios-purple/20 text-purple-300 rounded-full border border-ios-purple/30 backdrop-blur-md">
-          Nouveauté Bêta
+          Recommandé
         </span>
-        <h2 class="text-2xl font-bold tracking-tight text-white">ios Kit</h2>
+        <h2 class="text-2xl font-bold tracking-tight text-white">LiquidSiri</h2>
         <p class="text-gray-300 text-xs sm:text-sm leading-relaxed max-w-[90%]">
-          ...
+          UI Siri iOS 27 pour les anciennes versions d'iOS. Mettez à jour l'interface de votre assistant.
         </p>
         <div class="pt-2 flex items-center gap-3">
-          <button class="bg-white text-black px-5 py-2 rounded-full font-bold text-xs hover:scale-105 active:scale-95 transition-transform shadow-lg shadow-white/10">
-            Explorer le Tweak
+          <button id="hero-download-btn" class="bg-white text-black px-5 py-2 rounded-full font-bold text-xs hover:scale-105 active:scale-95 transition-transform shadow-lg shadow-white/10 flex items-center gap-1.5">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Télécharger .DEB</span>
           </button>
-          <span class="text-xs text-gray-400 font-medium">v2.4.0 • Stable</span>
+          <span class="text-xs text-gray-400 font-medium">v1.1.2-2 • Stable</span>
         </div>
       </div>
     </section>
 
-    <!-- FILTRES DE CATÉGORIES (Pilules scrollables) -->
+    <!-- FILTRES DE CATÉGORIES -->
     <section class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 -mx-5 px-5">
       <button class="category-btn active px-4 py-2 rounded-full text-xs font-semibold bg-white text-black transition-all shadow-md shadow-white/10" data-cat="all">
         Tous les Tweaks
@@ -167,12 +168,12 @@
     <section class="space-y-4">
       <div class="flex justify-between items-center px-1">
         <h3 class="text-lg font-bold tracking-tight">Tweaks Disponibles</h3>
-        <span id="tweak-count" class="text-xs text-gray-400 font-medium">3 éléments</span>
+        <span id="tweak-count" class="text-xs text-gray-400 font-medium">0 élément</span>
       </div>
 
-      <!-- Conteneur dynamique où vos tweaks seront injectés -->
+      <!-- Conteneur dynamique des tweaks -->
       <div id="tweaks-container" class="space-y-3">
-        <!-- Rempli dynamiquement par le script JavaScript ci-dessous -->
+        <!-- Rempli par JavaScript -->
       </div>
     </section>
 
@@ -186,12 +187,12 @@
       <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto cursor-pointer" id="close-modal-bar"></div>
       
       <div class="flex items-start gap-4">
-        <div id="modal-icon" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+        <div id="modal-icon" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-lg flex-shrink-0">
           <i data-lucide="package" class="w-8 h-8"></i>
         </div>
-        <div class="flex-1">
-          <h2 id="modal-title" class="text-xl font-bold">Nom du Tweak</h2>
-          <p id="modal-author" class="text-xs text-gray-400">Par Dev • Version 1.0</p>
+        <div class="flex-1 min-w-0">
+          <h2 id="modal-title" class="text-xl font-bold truncate">Nom du Tweak</h2>
+          <p id="modal-author" class="text-xs text-gray-400 truncate">Par Dev • Version 1.0</p>
           <span id="modal-tag" class="inline-block mt-2 px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-md bg-white/10 text-purple-300 border border-white/10">
             Système
           </span>
@@ -205,14 +206,14 @@
         </p>
       </div>
 
-      <!-- Boutons d'action -->
+      <!-- Boutons d'action de la modal -->
       <div class="flex gap-3 pt-2">
         <button id="close-modal-btn" class="flex-1 py-3.5 rounded-2xl liquid-glass text-sm font-semibold text-gray-300 hover:text-white transition-colors">
           Fermer
         </button>
         <button id="install-btn" class="flex-1 py-3.5 rounded-2xl bg-ios-blue text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/25">
           <i data-lucide="download" class="w-4 h-4"></i>
-          <span>Installer le Tweak</span>
+          <span>Télécharger le .DEB</span>
         </button>
       </div>
     </div>
@@ -248,11 +249,11 @@
   </div>
 
   <!-- ========================================
-       SCRIPT JAVASCRIPT (LOGIQUE & INTEGRATION GITHUB)
+       SCRIPT JAVASCRIPT (GESTION DU TÉLÉCHARGEMENT)
        ======================================== -->
   <script>
     // ------------------------------------------------------------------
-    // 1. BASE DE DONNÉES LOCALE (FALLBACK / PAR DÉFAUT)
+    // 1. LISTE DE VOS TWEAKS AVEC VOTRE LIEN RAW GITHUB COMPLET
     // ------------------------------------------------------------------
     const defaultTweaks = [
       {
@@ -264,60 +265,45 @@
         icon: "sparkles",
         gradient: "from-blue-500 to-indigo-600",
         description: "ui siri ios 27 for old ios",
-        downloadUrl: "https://release-assets.githubusercontent.com/github-production-release-asset/1344539412/63e323e3-f561-4220-a94e-b89868e1ec5a?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-08-28T16%3A43%3A36Z&rscd=attachment%3B+filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-08-28T15%3A42%3A51Z&ske=2026-08-28T16%3A43%3A36Z&sks=b&skv=2018-11-09&sig=XyUYIDkHR3wZMYQRGufIRbBIxMEqdpKBB1tId9ymmB8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NzkzMzcwNywibmJmIjoxNzg3OTMzNDA3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.5ihCRQxi__EgUwPekiOXOWQh3aWeyv9JZkapaMi8bSc&response-content-disposition=attachment%3B%20filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&response-content-type=application%2Foctet-stream"
+        downloadUrl: "https://release-assets.githubusercontent.com/github-production-release-asset/1344539412/63e323e3-f561-4220-a94e-b89868e1ec5a?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-08-28T16%3A43%3A36Z&rscd=attachment%3B+filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-08-28T15%3A42%3A51Z&ske=2026-08-28T16%3A43%3A36Z&sks=b&skv=2018-11-09&sig=XyUYIDkHR3wZMYQRGufIRbBIxMEqdpKBB1tId9ymmB8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NzkzMzcwNywibmJmIjoxNzg3OTMzNDA3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iNvNvcmUud2luZG93cy5uZXQifQ.5ihCRQxi__EgUwPekiOXOWQh3aWeyv9JZkapaMi8bSc&response-content-disposition=attachment%3B%20filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&response-content-type=application%2Foctet-stream"
       },
       {
         id: "tweak-2",
-        name: "...",
-        author: "...",
+        name: "PosterBoard Customizer",
+        author: "ttoff999",
         version: "1.4.2",
         category: "design",
         icon: "layout-grid",
         gradient: "from-purple-500 to-pink-500",
-        description: "...",
-        downloadUrl: "#"
-      },
-      {
-        id: "tweak-3",
-        name: "...",
-        author: "...",
-        version: "1.0.8",
-        category: "utility",
-        icon: "cpu",
-        gradient: "from-emerald-400 to-teal-600",
-        description: "...",
+        description: "Personnalisez l'écran de verrouillage avec des effets de profondeur Liquid Glass.",
         downloadUrl: "#"
       }
     ];
 
     let currentTweaks = [...defaultTweaks];
+    let selectedTweak = null;
 
     // ------------------------------------------------------------------
-    // 2. FONCTION POUR CHARGER DEPUIS GITHUB (À DÉBLOCUER PLUS TARD)
+    // 2. FONCTION POUR DÉCLENCHER LE TÉLÉCHARGEMENT DE FICHIER (.DEB)
     // ------------------------------------------------------------------
-    /*
-      Pour charger vos tweaks automatiquement depuis GitHub :
-      1. Créez un fichier `tweaks.json` dans votre dépôt GitHub.
-      2. Remplacez l'URL ci-dessous par l'URL raw de votre fichier JSON.
-    */
-    async function fetchTweaksFromGithub() {
-      // Remplacez par votre URL RAW GitHub :
-      const GITHUB_JSON_URL = "https://raw.githubusercontent.com/VOTRE_USER/VOTRE_REPO/main/tweaks.json";
-
-      try {
-        const response = await fetch(GITHUB_JSON_URL);
-        if (response.ok) {
-          const data = await response.json();
-          currentTweaks = data;
-          renderTweaks(currentTweaks);
-        }
-      } catch (error) {
-        console.log("Utilisation des tweaks locaux par défaut (GitHub non connecté encore).");
+    function triggerDownload(url) {
+      if (!url || url === '#') {
+        alert("Lien de téléchargement non spécifié pour ce tweak.");
+        return;
       }
+      
+      // Crée un élément lien <a> invisible et simule le clic pour ouvrir/télécharger le RAW
+      const link = document.createElement('a');
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // ------------------------------------------------------------------
-    // 3. AFFICHAGE DYNAMIQUE DES TWEAKS
+    // 3. AFFICHAGE DYNAMIQUE DES TWEAKS & GESTION DU BOUTON "OBTENIR"
     // ------------------------------------------------------------------
     function renderTweaks(tweaksToRender) {
       const container = document.getElementById('tweaks-container');
@@ -329,7 +315,7 @@
       if (tweaksToRender.length === 0) {
         container.innerHTML = `
           <div class="text-center py-10 text-gray-400 text-sm">
-            Aucun tweak trouvé dans cette catégorie.
+            Aucun tweak trouvé.
           </div>
         `;
         return;
@@ -350,35 +336,44 @@
             </div>
           </div>
           
-          <button class="install-action-btn ml-3 px-4 py-1.5 rounded-full bg-white/10 text-ios-blue text-xs font-bold border border-white/10 hover:bg-ios-blue hover:text-white transition-all flex-shrink-0">
-            Obtenir
+          <button class="download-action-btn ml-3 px-4 py-1.5 rounded-full bg-white/10 text-ios-blue text-xs font-bold border border-white/10 hover:bg-ios-blue hover:text-white transition-all flex-shrink-0 flex items-center gap-1">
+            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+            <span>Obtenir</span>
           </button>
         `;
 
-        // Événement clic sur la carte pour ouvrir la modal
+        // Événement clic sur le bouton "Obtenir" (lance directement le téléchargement)
+        const downloadBtn = card.querySelector('.download-action-btn');
+        downloadBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // Évite d'ouvrir la fenêtre modale
+          triggerDownload(tweak.downloadUrl);
+        });
+
+        // Événement clic sur le reste de la carte (ouvre la vue détaillée)
         card.addEventListener('click', () => openModal(tweak));
 
         container.appendChild(card);
       });
 
-      // Réinitialiser les icônes Lucide injectées
       lucide.createIcons();
     }
 
     // ------------------------------------------------------------------
-    // 4. GESTION DE LA MODAL (DÉTAILS)
+    // 4. GESTION DE LA MODAL & BOUTON D'INSTALLATION
     // ------------------------------------------------------------------
     const modal = document.getElementById('detail-modal');
     const modalContent = modal.querySelector('div');
+    const installBtn = document.getElementById('install-btn');
 
     function openModal(tweak) {
+      selectedTweak = tweak;
       document.getElementById('modal-title').textContent = tweak.name;
       document.getElementById('modal-author').textContent = `Par ${tweak.author} • v${tweak.version}`;
       document.getElementById('modal-desc').textContent = tweak.description;
       document.getElementById('modal-tag').textContent = tweak.category.toUpperCase();
       
       const iconContainer = document.getElementById('modal-icon');
-      iconContainer.className = `w-16 h-16 rounded-2xl bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-lg`;
+      iconContainer.className = `w-16 h-16 rounded-2xl bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-lg flex-shrink-0`;
       iconContainer.innerHTML = `<i data-lucide="${tweak.icon || 'package'}" class="w-8 h-8"></i>`;
       
       lucide.createIcons();
@@ -398,6 +393,19 @@
       }, 300);
     }
 
+    // Action de téléchargement depuis la modal
+    installBtn.addEventListener('click', () => {
+      if (selectedTweak && selectedTweak.downloadUrl) {
+        triggerDownload(selectedTweak.downloadUrl);
+      }
+    });
+
+    // Événement sur la bannière Hero
+    document.getElementById('hero-download-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
+      triggerDownload(defaultTweaks[0].downloadUrl);
+    });
+
     document.getElementById('close-modal-btn').addEventListener('click', closeModal);
     document.getElementById('close-modal-bar').addEventListener('click', closeModal);
     modal.addEventListener('click', (e) => {
@@ -405,7 +413,7 @@
     });
 
     // ------------------------------------------------------------------
-    // 5. GESTION DES FILTRES DE CATÉGORIES & RECHERCHE
+    // 5. RECHERCHE & FILTRES
     // ------------------------------------------------------------------
     const categoryBtns = document.querySelectorAll('.category-btn');
     categoryBtns.forEach(btn => {
@@ -428,7 +436,7 @@
       });
     });
 
-    // Barre de recherche toggle
+    // Barre de recherche
     const searchBtn = document.getElementById('search-btn');
     const searchContainer = document.getElementById('search-bar-container');
     const searchInput = document.getElementById('search-input');
@@ -450,7 +458,7 @@
       renderTweaks(filtered);
     });
 
-    // Navigation de la barre du bas
+    // Navigation barre du bas
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
       item.addEventListener('click', () => {
@@ -464,14 +472,11 @@
     });
 
     // ------------------------------------------------------------------
-    // INITIALISATION AU CHARGEMENT DE LA PAGE
+    // INITIALISATION
     // ------------------------------------------------------------------
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       renderTweaks(currentTweaks);
-      
-      // Tentative optionnelle de chargement GitHub
-      fetchTweaksFromGithub();
     });
   </script>
 </body>
