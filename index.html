@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Hub - Tweaks iOS </title>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Icônes Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Configuration personnalisée Tailwind -->
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', 'sans-serif'],
+          },
+          colors: {
+            ios: {
+              blue: '#0a84ff',
+              green: '#30d158',
+              orange: '#ff9f0a',
+              red: '#ff453a',
+              purple: '#bf5af2',
+              card: 'rgba(255, 255, 255, 0.07)',
+              glass: 'rgba(255, 255, 255, 0.12)',
+              border: 'rgba(255, 255, 255, 0.18)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Effets Liquid Glass & animations fluides style iOS */
+    .liquid-glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    .liquid-glass-nav {
+      background: rgba(30, 30, 35, 0.65);
+      backdrop-filter: blur(35px) saturate(200%);
+      -webkit-backdrop-filter: blur(35px) saturate(200%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .glass-card:active {
+      transform: scale(0.97);
+    }
+
+    /* Masquer la scrollbar tout en restant défilable */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-black text-white font-sans antialiased min-h-screen overflow-x-hidden selection:bg-ios-purple/30">
+
+  <!-- ========================================
+       ORBES LUMINEUX EN ARRIÈRE-PLAN
+       ======================================== -->
+  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+    <!-- Orbe Violette Top Left -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-600/30 rounded-full blur-[120px]"></div>
+    <!-- Orbe Bleue Middle Right -->
+    <div class="absolute top-1/3 -right-24 w-[28rem] h-[28rem] bg-blue-600/25 rounded-full blur-[140px]"></div>
+    <!-- Orbe Cyan Bottom Left -->
+    <div class="absolute -bottom-24 left-10 w-80 h-80 bg-cyan-600/20 rounded-full blur-[110px]"></div>
+  </div>
+
+  <!-- ========================================
+       CONTENU PRINCIPAL
+       ======================================== -->
+  <main class="relative z-10 px-5 pt-14 pb-36 max-w-xl mx-auto space-y-8">
+
+    <!-- En-tête du site -->
+    <header class="flex justify-between items-center pt-2">
+      <div>
+        <h1 class="text-3xl sm:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">
+          Aura Hub
+        </h1>
+        <p class="text-gray-400 text-xs sm:text-sm mt-1 font-medium flex items-center gap-1.5">
+          <i data-lucide="github" class="w-4 h-4 text-ios-purple"></i>
+          <span>Dépôt officiel GitHub</span>
+          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-1"></span>
+        </p>
+      </div>
+
+      <!-- Bouton Recherche -->
+      <button id="search-btn" class="p-3 rounded-full liquid-glass hover:bg-white/15 transition-colors">
+        <i data-lucide="search" class="w-5 h-5 text-white"></i>
+      </button>
+    </header>
+
+    <!-- Champ de recherche caché par défaut -->
+    <div id="search-bar-container" class="hidden transition-all duration-300">
+      <div class="relative">
+        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
+        <input 
+          type="text" 
+          id="search-input"
+          placeholder="Rechercher un tweak, un thème..." 
+          class="w-full pl-11 pr-4 py-3 rounded-2xl liquid-glass text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ios-purple/50"
+        >
+      </div>
+    </div>
+
+    <!-- BANNIÈRE HERO "À LA UNE" -->
+    <section class="relative overflow-hidden rounded-[2rem] p-7 liquid-glass shadow-2xl group cursor-pointer border border-white/20">
+      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
+      <div class="relative z-10 space-y-3">
+        <span class="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-ios-purple/20 text-purple-300 rounded-full border border-ios-purple/30 backdrop-blur-md">
+          Nouveauté Bêta
+        </span>
+        <h2 class="text-2xl font-bold tracking-tight text-white">ios Kit</h2>
+        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed max-w-[90%]">
+          ...
+        </p>
+        <div class="pt-2 flex items-center gap-3">
+          <button class="bg-white text-black px-5 py-2 rounded-full font-bold text-xs hover:scale-105 active:scale-95 transition-transform shadow-lg shadow-white/10">
+            Explorer le Tweak
+          </button>
+          <span class="text-xs text-gray-400 font-medium">v2.4.0 • Stable</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FILTRES DE CATÉGORIES (Pilules scrollables) -->
+    <section class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 -mx-5 px-5">
+      <button class="category-btn active px-4 py-2 rounded-full text-xs font-semibold bg-white text-black transition-all shadow-md shadow-white/10" data-cat="all">
+        Tous les Tweaks
+      </button>
+      <button class="category-btn px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-gray-300 hover:text-white transition-all" data-cat="system">
+        Système & Mod
+      </button>
+      <button class="category-btn px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-gray-300 hover:text-white transition-all" data-cat="design">
+        Design & UI
+      </button>
+      <button class="category-btn px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-gray-300 hover:text-white transition-all" data-cat="utility">
+        Utilitaires
+      </button>
+    </section>
+
+    <!-- LISTE DES TWEAKS -->
+    <section class="space-y-4">
+      <div class="flex justify-between items-center px-1">
+        <h3 class="text-lg font-bold tracking-tight">Tweaks Disponibles</h3>
+        <span id="tweak-count" class="text-xs text-gray-400 font-medium">3 éléments</span>
+      </div>
+
+      <!-- Conteneur dynamique où vos tweaks seront injectés -->
+      <div id="tweaks-container" class="space-y-3">
+        <!-- Rempli dynamiquement par le script JavaScript ci-dessous -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================
+       MODAL DE DÉTAIL DU TWEAK
+       ======================================== -->
+  <div id="detail-modal" class="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+    <div class="w-full max-w-xl liquid-glass rounded-t-[2.5rem] p-6 space-y-6 transform translate-y-full transition-transform duration-300 border-t border-white/20">
+      <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto cursor-pointer" id="close-modal-bar"></div>
+      
+      <div class="flex items-start gap-4">
+        <div id="modal-icon" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-lg">
+          <i data-lucide="package" class="w-8 h-8"></i>
+        </div>
+        <div class="flex-1">
+          <h2 id="modal-title" class="text-xl font-bold">Nom du Tweak</h2>
+          <p id="modal-author" class="text-xs text-gray-400">Par Dev • Version 1.0</p>
+          <span id="modal-tag" class="inline-block mt-2 px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-md bg-white/10 text-purple-300 border border-white/10">
+            Système
+          </span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Description</h4>
+        <p id="modal-desc" class="text-sm text-gray-200 leading-relaxed">
+          Description détaillée du tweak...
+        </p>
+      </div>
+
+      <!-- Boutons d'action -->
+      <div class="flex gap-3 pt-2">
+        <button id="close-modal-btn" class="flex-1 py-3.5 rounded-2xl liquid-glass text-sm font-semibold text-gray-300 hover:text-white transition-colors">
+          Fermer
+        </button>
+        <button id="install-btn" class="flex-1 py-3.5 rounded-2xl bg-ios-blue text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/25">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          <span>Installer le Tweak</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================
+       BARRE DE NAVIGATION "LIQUID GLASS" (FLOTTANTE)
+       ======================================== -->
+  <div class="fixed bottom-6 left-0 right-0 z-40 px-5 pointer-events-none">
+    <nav class="pointer-events-auto max-w-md mx-auto h-[68px] liquid-glass-nav rounded-full flex justify-around items-center px-4 shadow-2xl shadow-black/80">
+      
+      <button class="nav-item active flex flex-col items-center justify-center w-14 h-12 text-ios-blue transition-colors" data-tab="home">
+        <i data-lucide="compass" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Découvrir</span>
+      </button>
+
+      <button class="nav-item flex flex-col items-center justify-center w-14 h-12 text-gray-400 hover:text-gray-200 transition-colors" data-tab="installed">
+        <i data-lucide="layers" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Tweaks</span>
+      </button>
+
+      <button class="nav-item flex flex-col items-center justify-center w-14 h-12 text-gray-400 hover:text-gray-200 transition-colors" data-tab="sources">
+        <i data-lucide="git-branch" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Sources</span>
+      </button>
+
+      <button class="nav-item flex flex-col items-center justify-center w-14 h-12 text-gray-400 hover:text-gray-200 transition-colors" data-tab="settings">
+        <i data-lucide="sliders" class="w-5 h-5"></i>
+        <span class="text-[10px] font-medium mt-1">Réglages</span>
+      </button>
+
+    </nav>
+  </div>
+
+  <!-- ========================================
+       SCRIPT JAVASCRIPT (LOGIQUE & INTEGRATION GITHUB)
+       ======================================== -->
+  <script>
+    // ------------------------------------------------------------------
+    // 1. BASE DE DONNÉES LOCALE (FALLBACK / PAR DÉFAUT)
+    // ------------------------------------------------------------------
+    const defaultTweaks = [
+      {
+        id: "tweak-1",
+        name: "...",
+        author: "...",
+        version: "2.1.0",
+        category: "system",
+        icon: "sparkles",
+        gradient: "from-blue-500 to-indigo-600",
+        description: "...",
+        downloadUrl: "#"
+      },
+      {
+        id: "tweak-2",
+        name: "...",
+        author: "...",
+        version: "1.4.2",
+        category: "design",
+        icon: "layout-grid",
+        gradient: "from-purple-500 to-pink-500",
+        description: "...",
+        downloadUrl: "#"
+      },
+      {
+        id: "tweak-3",
+        name: "...",
+        author: "...",
+        version: "1.0.8",
+        category: "utility",
+        icon: "cpu",
+        gradient: "from-emerald-400 to-teal-600",
+        description: "...",
+        downloadUrl: "#"
+      }
+    ];
+
+    let currentTweaks = [...defaultTweaks];
+
+    // ------------------------------------------------------------------
+    // 2. FONCTION POUR CHARGER DEPUIS GITHUB (À DÉBLOCUER PLUS TARD)
+    // ------------------------------------------------------------------
+    /*
+      Pour charger vos tweaks automatiquement depuis GitHub :
+      1. Créez un fichier `tweaks.json` dans votre dépôt GitHub.
+      2. Remplacez l'URL ci-dessous par l'URL raw de votre fichier JSON.
+    */
+    async function fetchTweaksFromGithub() {
+      // Remplacez par votre URL RAW GitHub :
+      const GITHUB_JSON_URL = "https://raw.githubusercontent.com/VOTRE_USER/VOTRE_REPO/main/tweaks.json";
+
+      try {
+        const response = await fetch(GITHUB_JSON_URL);
+        if (response.ok) {
+          const data = await response.json();
+          currentTweaks = data;
+          renderTweaks(currentTweaks);
+        }
+      } catch (error) {
+        console.log("Utilisation des tweaks locaux par défaut (GitHub non connecté encore).");
+      }
+    }
+
+    // ------------------------------------------------------------------
+    // 3. AFFICHAGE DYNAMIQUE DES TWEAKS
+    // ------------------------------------------------------------------
+    function renderTweaks(tweaksToRender) {
+      const container = document.getElementById('tweaks-container');
+      const countEl = document.getElementById('tweak-count');
+      
+      container.innerHTML = '';
+      countEl.textContent = `${tweaksToRender.length} élément${tweaksToRender.length > 1 ? 's' : ''}`;
+
+      if (tweaksToRender.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 text-gray-400 text-sm">
+            Aucun tweak trouvé dans cette catégorie.
+          </div>
+        `;
+        return;
+      }
+
+      tweaksToRender.forEach(tweak => {
+        const card = document.createElement('div');
+        card.className = "glass-card rounded-2xl p-4 flex items-center justify-between cursor-pointer group";
+        
+        card.innerHTML = `
+          <div class="flex items-center gap-3.5 flex-1 min-w-0">
+            <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-md flex-shrink-0">
+              <i data-lucide="${tweak.icon || 'package'}" class="w-6 h-6"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <h4 class="font-bold text-sm text-white truncate group-hover:text-ios-blue transition-colors">${tweak.name}</h4>
+              <p class="text-xs text-gray-400 truncate mt-0.5">v${tweak.version} • Par ${tweak.author}</p>
+            </div>
+          </div>
+          
+          <button class="install-action-btn ml-3 px-4 py-1.5 rounded-full bg-white/10 text-ios-blue text-xs font-bold border border-white/10 hover:bg-ios-blue hover:text-white transition-all flex-shrink-0">
+            Obtenir
+          </button>
+        `;
+
+        // Événement clic sur la carte pour ouvrir la modal
+        card.addEventListener('click', () => openModal(tweak));
+
+        container.appendChild(card);
+      });
+
+      // Réinitialiser les icônes Lucide injectées
+      lucide.createIcons();
+    }
+
+    // ------------------------------------------------------------------
+    // 4. GESTION DE LA MODAL (DÉTAILS)
+    // ------------------------------------------------------------------
+    const modal = document.getElementById('detail-modal');
+    const modalContent = modal.querySelector('div');
+
+    function openModal(tweak) {
+      document.getElementById('modal-title').textContent = tweak.name;
+      document.getElementById('modal-author').textContent = `Par ${tweak.author} • v${tweak.version}`;
+      document.getElementById('modal-desc').textContent = tweak.description;
+      document.getElementById('modal-tag').textContent = tweak.category.toUpperCase();
+      
+      const iconContainer = document.getElementById('modal-icon');
+      iconContainer.className = `w-16 h-16 rounded-2xl bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-lg`;
+      iconContainer.innerHTML = `<i data-lucide="${tweak.icon || 'package'}" class="w-8 h-8"></i>`;
+      
+      lucide.createIcons();
+
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalContent.classList.remove('translate-y-full');
+      }, 10);
+    }
+
+    function closeModal() {
+      modal.classList.add('opacity-0');
+      modalContent.classList.add('translate-y-full');
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
+    }
+
+    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+    document.getElementById('close-modal-bar').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    // ------------------------------------------------------------------
+    // 5. GESTION DES FILTRES DE CATÉGORIES & RECHERCHE
+    // ------------------------------------------------------------------
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        categoryBtns.forEach(b => {
+          b.classList.remove('active', 'bg-white', 'text-black');
+          b.classList.add('liquid-glass', 'text-gray-300');
+        });
+        
+        btn.classList.add('active', 'bg-white', 'text-black');
+        btn.classList.remove('liquid-glass', 'text-gray-300');
+
+        const cat = btn.getAttribute('data-cat');
+        if (cat === 'all') {
+          renderTweaks(currentTweaks);
+        } else {
+          const filtered = currentTweaks.filter(t => t.category === cat);
+          renderTweaks(filtered);
+        }
+      });
+    });
+
+    // Barre de recherche toggle
+    const searchBtn = document.getElementById('search-btn');
+    const searchContainer = document.getElementById('search-bar-container');
+    const searchInput = document.getElementById('search-input');
+
+    searchBtn.addEventListener('click', () => {
+      searchContainer.classList.toggle('hidden');
+      if (!searchContainer.classList.contains('hidden')) {
+        searchInput.focus();
+      }
+    });
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const filtered = currentTweaks.filter(t => 
+        t.name.toLowerCase().includes(query) || 
+        t.description.toLowerCase().includes(query) ||
+        t.author.toLowerCase().includes(query)
+      );
+      renderTweaks(filtered);
+    });
+
+    // Navigation de la barre du bas
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        navItems.forEach(n => {
+          n.classList.remove('text-ios-blue');
+          n.classList.add('text-gray-400');
+        });
+        item.classList.add('text-ios-blue');
+        item.classList.remove('text-gray-400');
+      });
+    });
+
+    // ------------------------------------------------------------------
+    // INITIALISATION AU CHARGEMENT DE LA PAGE
+    // ------------------------------------------------------------------
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderTweaks(currentTweaks);
+      
+      // Tentative optionnelle de chargement GitHub
+      fetchTweaksFromGithub();
+    });
+  </script>
+</body>
+</html>
