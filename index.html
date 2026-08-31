@@ -62,7 +62,6 @@
       overscroll-behavior-y: none;
     }
 
-    /* Style Liquid Glass propre, sans distorsion globale */
     .liquid-glass {
       background: rgba(255, 255, 255, 0.07);
       backdrop-filter: blur(28px) saturate(190%);
@@ -91,7 +90,6 @@
       box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255,255,255,0.25);
     }
 
-    /* Indicateur Tab Bar (LGLiquidMotion) */
     .liquid-nav-thumb {
       background: rgba(255, 255, 255, 0.12);
       backdrop-filter: blur(20px) saturate(180%);
@@ -144,7 +142,6 @@
       pointer-events: none;
     }
 
-    /* Switch iOS */
     .ios-switch {
       width: 56px;
       height: 32px;
@@ -173,7 +170,6 @@
       transform: translateX(24px);
     }
 
-    /* Style du Slider Liquid (LGPrefsLiquidSlider) */
     .liquid-slider-container {
       position: relative;
       height: 40px;
@@ -232,17 +228,14 @@
 
   <div id="app-container">
     
-    <!-- Orbes lumineux d'arrière-plan -->
     <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
       <div class="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-purple-600/25 rounded-full blur-[130px] animate-blob"></div>
       <div class="absolute top-1/3 -right-32 w-[32rem] h-[32rem] bg-blue-600/20 rounded-full blur-[150px] animate-blob" style="animation-delay: 2.5s;"></div>
       <div class="absolute -bottom-32 left-10 w-[28rem] h-[28rem] bg-cyan-500/15 rounded-full blur-[120px] animate-blob" style="animation-delay: 5s;"></div>
     </div>
 
-    <!-- Contenu Principal -->
     <main class="relative z-10 px-5 pt-14 pb-36 max-w-xl mx-auto space-y-8">
 
-      <!-- En-tête -->
       <header class="flex justify-between items-center pt-2 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
         <div>
           <h1 class="text-3xl sm:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">
@@ -259,7 +252,6 @@
         </button>
       </header>
 
-      <!-- Barre de recherche -->
       <div id="search-bar-container" class="hidden transition-all duration-300 opacity-0 -translate-y-4">
         <div class="relative group">
           <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-ios-purple transition-colors"></i>
@@ -267,7 +259,6 @@
         </div>
       </div>
 
-      <!-- Bannière Hero -->
       <section class="relative rounded-[2.25rem] p-7 liquid-glass shadow-2xl group cursor-pointer border border-white/15 active:scale-[0.98] transition-transform duration-300 animate-slideUp" style="animation-delay: 0.2s; opacity: 0;" id="hero-banner">
         <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-15deg] animate-shimmer"></div>
         <div class="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-blue-500/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -288,24 +279,7 @@
           </div>
         </div>
       </section>
-        
-        <!-- Slider Élastique (LGPrefsLiquidSlider) -->
-        <div class="space-y-2 pt-2 border-t border-white/10">
-          <div class="flex justify-between text-xs text-gray-300">
-            <span>Intensité de réfraction</span>
-            <span id="slider-value">1.85</span>
-          </div>
-          
-          <div class="liquid-slider-container" id="liquid-slider">
-            <div class="liquid-slider-track">
-              <div class="liquid-slider-fill" id="slider-fill"></div>
-            </div>
-            <div class="liquid-slider-thumb" id="slider-thumb"></div>
-          </div>
-        </div>
-      </section>
 
-      <!-- Liste Tweak Unique -->
       <section class="space-y-4 relative z-20">
         <div class="flex justify-between items-center px-1 animate-slideUp" style="animation-delay: 0.4s; opacity: 0;">
           <h3 class="text-lg font-bold tracking-tight">Tweaks Disponibles</h3>
@@ -317,16 +291,11 @@
     </main>
   </div>
 
-  <!-- ========================================
-       BARRE DE NAVIGATION AVEC PHYSIQUE LGLiquidMotion
-       ======================================== -->
   <div id="bottom-nav-container" class="fixed bottom-6 left-0 right-0 z-40 px-5 pointer-events-none transition-transform duration-500 cubic-bezier(0.32,0.72,0,1)">
     <nav class="pointer-events-auto relative max-w-md mx-auto h-[72px] liquid-glass-nav rounded-[2.5rem] flex justify-around items-center px-2">
       
-      <!-- Indicateur élastique (Thumb) -->
       <div id="liquid-indicator" class="liquid-nav-thumb absolute top-[8px] left-0 h-[56px] rounded-[1.75rem] pointer-events-none z-0"></div>
       
-      <!-- Boutons de navigation -->
       <button class="nav-item active flex flex-col items-center justify-center w-[4.5rem] h-14 text-white transition-colors duration-300 rounded-2xl active:scale-90 relative z-10 cursor-pointer" data-tab="home">
         <i data-lucide="compass" class="w-6 h-6 mb-0.5 text-ios-blue drop-shadow-md pointer-events-none"></i>
         <span class="text-[10px] font-bold pointer-events-none">Découvrir</span>
@@ -350,7 +319,6 @@
     </nav>
   </div>
 
-  <!-- Modal Détaillée (iOS Sheet) -->
   <div id="detail-modal" class="fixed inset-0 z-50 flex items-end justify-center pointer-events-none transition-all duration-500">
     <div id="modal-backdrop" class="absolute inset-0 opacity-0 transition-opacity duration-500 cursor-pointer"></div>
     <div id="modal-content" class="w-full h-[85vh] max-w-xl liquid-glass bg-[#121215]/85 rounded-t-[2.5rem] p-6 pt-3 space-y-6 transform translate-y-full transition-transform duration-500 cubic-bezier(0.32,0.72,0,1) border-t border-white/25 shadow-[0_-15px_60px_rgba(0,0,0,0.9)] relative z-10 flex flex-col pointer-events-auto">
@@ -423,75 +391,6 @@
       lucide.createIcons();
     }
 
-    const demoSwitch = document.getElementById('demo-switch');
-    demoSwitch.addEventListener('click', () => {
-      demoSwitch.classList.toggle('active');
-    });
-
-    // Slider Physique (LGPrefsLiquidSlider)
-    const sliderContainer = document.getElementById('liquid-slider');
-    const sliderThumb = document.getElementById('slider-thumb');
-    const sliderFill = document.getElementById('slider-fill');
-    const sliderValueDisplay = document.getElementById('slider-value');
-
-    let sliderValue = 1.85;
-    const minVal = 1.0, maxVal = 3.0;
-
-    function updateSliderUI(val, stretch = 0) {
-      sliderValue = Math.max(minVal, Math.min(maxVal, val));
-      const percent = ((sliderValue - minVal) / (maxVal - minVal)) * 100;
-      
-      sliderFill.style.width = `${percent}%`;
-      sliderThumb.style.left = `${percent}%`;
-      sliderValueDisplay.textContent = sliderValue.toFixed(2);
-
-      const scaleX = 1.0 + Math.abs(stretch) * 0.008;
-      const scaleY = Math.max(0.75, 1.0 - Math.abs(stretch) * 0.004);
-      sliderThumb.style.transform = `translateX(-50%) scale(${scaleX}, ${scaleY})`;
-    }
-
-    let isDraggingSlider = false;
-    let lastMouseX = 0;
-
-    sliderThumb.addEventListener('pointerdown', (e) => {
-      isDraggingSlider = true;
-      lastMouseX = e.clientX;
-      sliderThumb.setPointerCapture(e.pointerId);
-      sliderThumb.style.width = '64px';
-    });
-
-    sliderThumb.addEventListener('pointermove', (e) => {
-      if (!isDraggingSlider) return;
-      const rect = sliderContainer.getBoundingClientRect();
-      const deltaX = e.clientX - lastMouseX;
-      lastMouseX = e.clientX;
-
-      const rawX = e.clientX - rect.left;
-      const newPercent = Math.max(0, Math.min(1, rawX / rect.width));
-      const newVal = minVal + newPercent * (maxVal - minVal);
-
-      updateSliderUI(newVal, deltaX);
-    });
-
-    sliderThumb.addEventListener('pointerup', (e) => {
-      isDraggingSlider = false;
-      sliderThumb.style.width = '54px';
-      sliderThumb.style.transform = 'translateX(-50%) scale(1, 1)';
-      if (sliderThumb.hasPointerCapture(e.pointerId)) {
-        sliderThumb.releasePointerCapture(e.pointerId);
-      }
-    });
-
-    sliderContainer.addEventListener('click', (e) => {
-      if (e.target === sliderThumb) return;
-      const rect = sliderContainer.getBoundingClientRect();
-      const rawX = e.clientX - rect.left;
-      const newPercent = Math.max(0, Math.min(1, rawX / rect.width));
-      const newVal = minVal + newPercent * (maxVal - minVal);
-      updateSliderUI(newVal, 0);
-    });
-
-    // Modal & Recherche
     const appContainer = document.getElementById('app-container');
     const bottomNav = document.getElementById('bottom-nav-container');
     const modal = document.getElementById('detail-modal');
@@ -547,7 +446,6 @@
       renderTweaks(currentTweaks.filter(t => t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)));
     });
 
-    // Tab Bar (LGLiquidMotion)
     const indicator = document.getElementById('liquid-indicator');
     const navItems = document.querySelectorAll('.nav-item');
     
@@ -618,7 +516,6 @@
         setIndicatorTarget(firstItem, true);
         animateLiquidThumb();
       }
-      updateSliderUI(sliderValue, 0);
     });
   </script>
 </body>
