@@ -2,8 +2,8 @@
 <html lang="fr" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aura Hub - Tweaks iOS Liquid Glass</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Aura Hub - by ttoff999</title>
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -27,9 +27,27 @@
               orange: '#ff9f0a',
               red: '#ff453a',
               purple: '#bf5af2',
-              card: 'rgba(255, 255, 255, 0.07)',
-              glass: 'rgba(255, 255, 255, 0.12)',
-              border: 'rgba(255, 255, 255, 0.18)'
+            }
+          },
+          animation: {
+            blob: 'blob 14s infinite cubic-bezier(0.4, 0, 0.2, 1)',
+            slideUp: 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+            shimmer: 'shimmer 2.5s infinite linear',
+          },
+          keyframes: {
+            blob: {
+              '0%': { transform: 'translate(0px, 0px) scale(1)' },
+              '33%': { transform: 'translate(40px, -60px) scale(1.2)' },
+              '66%': { transform: 'translate(-30px, 30px) scale(0.8)' },
+              '100%': { transform: 'translate(0px, 0px) scale(1)' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' },
+              '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+            },
+            shimmer: {
+              '0%': { transform: 'translateX(-150%) skewX(-15deg)' },
+              '100%': { transform: 'translateX(250%) skewX(-15deg)' }
             }
           }
         }
@@ -38,35 +56,65 @@
   </script>
 
   <style>
-    /* Effets Liquid Glass & animations fluides style iOS */
+    body {
+      background-color: #000;
+      overflow-x: hidden;
+      overscroll-behavior-y: none;
+    }
+
+    /* Style Liquid Glass propre, sans distorsion globale */
     .liquid-glass {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.07);
       backdrop-filter: blur(28px) saturate(190%);
       -webkit-backdrop-filter: blur(28px) saturate(190%);
       border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .liquid-glass::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+      opacity: 0.7;
+      z-index: 2;
     }
 
     .liquid-glass-nav {
-      background: rgba(30, 30, 35, 0.65);
+      background: rgba(20, 20, 25, 0.65);
       backdrop-filter: blur(35px) saturate(200%);
       -webkit-backdrop-filter: blur(35px) saturate(200%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255,255,255,0.25);
+    }
+
+    /* Indicateur Tab Bar (LGLiquidMotion) */
+    .liquid-nav-thumb {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255,255,255,0.4);
+      transform-origin: center center;
+      will-change: transform, width;
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.045);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .glass-card:active {
-      transform: scale(0.97);
+      transform: scale(0.96);
+      background: rgba(255, 255, 255, 0.09);
     }
 
-    /* Masquer la scrollbar tout en restant défilable */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -74,409 +122,515 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+
+    #app-container {
+      transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), 
+                  border-radius 0.5s cubic-bezier(0.32, 0.72, 0, 1),
+                  opacity 0.5s ease,
+                  filter 0.5s ease;
+      transform-origin: top center;
+      min-height: 100vh;
+      background-color: black;
+      position: relative;
+      z-index: 10;
+    }
+    
+    .app-scaled {
+      transform: scale(0.92) translateY(12px);
+      border-radius: 2.5rem;
+      opacity: 0.5;
+      filter: blur(4px);
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    /* Switch iOS */
+    .ios-switch {
+      width: 56px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .ios-switch.active {
+      background: #30d158;
+    }
+    .ios-switch-thumb {
+      width: 26px;
+      height: 26px;
+      background: #ffffff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .ios-switch.active .ios-switch-thumb {
+      transform: translateX(24px);
+    }
+
+    /* Style du Slider Liquid (LGPrefsLiquidSlider) */
+    .liquid-slider-container {
+      position: relative;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .liquid-slider-track {
+      position: absolute;
+      left: 0; right: 0;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .liquid-slider-fill {
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      background: #0a84ff;
+      border-radius: 9999px;
+      width: 0%;
+      pointer-events: none;
+    }
+    .liquid-slider-thumb {
+      position: absolute;
+      width: 54px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(20px) saturate(190%);
+      -webkit-backdrop-filter: blur(20px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 9999px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.4), inset 0 1px 2px rgba(255,255,255,0.6);
+      top: 4px;
+      transform: translateX(-50%);
+      cursor: grab;
+      touch-action: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, width;
+      transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .liquid-slider-thumb::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      opacity: 0.9;
+    }
   </style>
 </head>
-<body class="bg-black text-white font-sans antialiased min-h-screen overflow-x-hidden selection:bg-ios-purple/30">
+<body class="text-white font-sans antialiased selection:bg-ios-purple/30">
 
-  <!-- ========================================
-       ORBES LUMINEUX EN ARRIÈRE-PLAN
-       ======================================== -->
-  <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-    <!-- Orbe Violette Top Left -->
-    <div class="absolute -top-24 -left-24 w-96 h-96 bg-purple-600/30 rounded-full blur-[120px]"></div>
-    <!-- Orbe Bleue Middle Right -->
-    <div class="absolute top-1/3 -right-24 w-[28rem] h-[28rem] bg-blue-600/25 rounded-full blur-[140px]"></div>
-    <!-- Orbe Cyan Bottom Left -->
-    <div class="absolute -bottom-24 left-10 w-80 h-80 bg-cyan-600/20 rounded-full blur-[110px]"></div>
-  </div>
-
-  <!-- ========================================
-       CONTENU PRINCIPAL
-       ======================================== -->
-  <main class="relative z-10 px-5 pt-14 pb-36 max-w-xl mx-auto space-y-8">
-
-    <!-- En-tête du site -->
-    <header class="flex justify-between items-center pt-2">
-      <div>
-        <h1 class="text-3xl sm:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">
-          Aura Hub
-        </h1>
-        <p class="text-gray-400 text-xs sm:text-sm mt-1 font-medium flex items-center gap-1.5">
-          <i data-lucide="github" class="w-4 h-4 text-ios-purple"></i>
-          <span>Dépôt officiel GitHub</span>
-          <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-1"></span>
-        </p>
-      </div>
-
-      <!-- Bouton Recherche -->
-      <button id="search-btn" class="p-3 rounded-full liquid-glass hover:bg-white/15 transition-colors">
-        <i data-lucide="search" class="w-5 h-5 text-white"></i>
-      </button>
-    </header>
-
-    <!-- Champ de recherche -->
-    <div id="search-bar-container" class="hidden transition-all duration-300">
-      <div class="relative">
-        <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400"></i>
-        <input 
-          type="text" 
-          id="search-input"
-          placeholder="Rechercher un tweak, un thème..." 
-          class="w-full pl-11 pr-4 py-3 rounded-2xl liquid-glass text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ios-purple/50"
-        >
-      </div>
+  <div id="app-container">
+    
+    <!-- Orbes lumineux d'arrière-plan -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+      <div class="absolute -top-32 -left-32 w-[30rem] h-[30rem] bg-purple-600/25 rounded-full blur-[130px] animate-blob"></div>
+      <div class="absolute top-1/3 -right-32 w-[32rem] h-[32rem] bg-blue-600/20 rounded-full blur-[150px] animate-blob" style="animation-delay: 2.5s;"></div>
+      <div class="absolute -bottom-32 left-10 w-[28rem] h-[28rem] bg-cyan-500/15 rounded-full blur-[120px] animate-blob" style="animation-delay: 5s;"></div>
     </div>
 
-    <!-- BANNIÈRE HERO "À LA UNE" -->
-    <section class="relative overflow-hidden rounded-[2rem] p-7 liquid-glass shadow-2xl group cursor-pointer border border-white/20">
-      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-blue-500/5 to-transparent opacity-80 group-hover:opacity-100 transition-opacity"></div>
-      <div class="relative z-10 space-y-3">
-        <span class="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-ios-purple/20 text-purple-300 rounded-full border border-ios-purple/30 backdrop-blur-md">
-          Recommandé
-        </span>
-        <h2 class="text-2xl font-bold tracking-tight text-white">LiquidSiri</h2>
-        <p class="text-gray-300 text-xs sm:text-sm leading-relaxed max-w-[90%]">
-          UI Siri iOS 27 pour les anciennes versions d'iOS. Mettez à jour l'interface de votre assistant.
-        </p>
-        <div class="pt-2 flex items-center gap-3">
-          <button id="hero-download-btn" class="bg-white text-black px-5 py-2 rounded-full font-bold text-xs hover:scale-105 active:scale-95 transition-transform shadow-lg shadow-white/10 flex items-center gap-1.5">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Télécharger .DEB</span>
-          </button>
-          <span class="text-xs text-gray-400 font-medium">v1.1.2-2 • Stable</span>
+    <!-- Contenu Principal -->
+    <main class="relative z-10 px-5 pt-14 pb-36 max-w-xl mx-auto space-y-8">
+
+      <!-- En-tête -->
+      <header class="flex justify-between items-center pt-2 animate-slideUp" style="animation-delay: 0.1s; opacity: 0;">
+        <div>
+          <h1 class="text-3xl sm:text-4xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">
+            Aura Hub
+          </h1>
+          <p class="text-gray-400 text-xs sm:text-sm mt-1 font-medium flex items-center gap-1.5">
+            <i data-lucide="github" class="w-4 h-4 text-ios-purple"></i>
+            <span>Dépôt officiel GitHub</span>
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse ml-1 shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
+          </p>
+        </div>
+        <button id="search-btn" class="p-3 rounded-full liquid-glass hover:bg-white/15 active:scale-90 transition-all duration-300">
+          <i data-lucide="search" class="w-5 h-5 text-white"></i>
+        </button>
+      </header>
+
+      <!-- Barre de recherche -->
+      <div id="search-bar-container" class="hidden transition-all duration-300 opacity-0 -translate-y-4">
+        <div class="relative group">
+          <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-ios-purple transition-colors"></i>
+          <input type="text" id="search-input" placeholder="Rechercher LiquidSiri..." class="w-full pl-11 pr-4 py-3.5 rounded-2xl liquid-glass text-sm text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-ios-purple/50 transition-shadow">
         </div>
       </div>
-    </section>
 
-    <!-- FILTRES DE CATÉGORIES -->
-    <section class="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 -mx-5 px-5">
-      <button class="category-btn active px-4 py-2 rounded-full text-xs font-semibold bg-white text-black transition-all shadow-md shadow-white/10" data-cat="all">
-        Tous les Tweaks
-      </button>
-      <button class="category-btn px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-gray-300 hover:text-white transition-all" data-cat="system">
-        Système & Mod
-      </button>
-      <button class="category-btn px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-gray-300 hover:text-white transition-all" data-cat="design">
-        Design & UI
-      </button>
-      <button class="category-btn px-4 py-2 rounded-full text-xs font-semibold liquid-glass text-gray-300 hover:text-white transition-all" data-cat="utility">
-        Utilitaires
-      </button>
-    </section>
-
-    <!-- LISTE DES TWEAKS -->
-    <section class="space-y-4">
-      <div class="flex justify-between items-center px-1">
-        <h3 class="text-lg font-bold tracking-tight">Tweaks Disponibles</h3>
-        <span id="tweak-count" class="text-xs text-gray-400 font-medium">0 élément</span>
-      </div>
-
-      <!-- Conteneur dynamique des tweaks -->
-      <div id="tweaks-container" class="space-y-3">
-        <!-- Rempli par JavaScript -->
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ========================================
-       MODAL DE DÉTAIL DU TWEAK
-       ======================================== -->
-  <div id="detail-modal" class="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-    <div class="w-full max-w-xl liquid-glass rounded-t-[2.5rem] p-6 space-y-6 transform translate-y-full transition-transform duration-300 border-t border-white/20">
-      <div class="w-12 h-1.5 bg-white/20 rounded-full mx-auto cursor-pointer" id="close-modal-bar"></div>
-      
-      <div class="flex items-start gap-4">
-        <div id="modal-icon" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-white shadow-lg flex-shrink-0">
-          <i data-lucide="package" class="w-8 h-8"></i>
-        </div>
-        <div class="flex-1 min-w-0">
-          <h2 id="modal-title" class="text-xl font-bold truncate">Nom du Tweak</h2>
-          <p id="modal-author" class="text-xs text-gray-400 truncate">Par Dev • Version 1.0</p>
-          <span id="modal-tag" class="inline-block mt-2 px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-md bg-white/10 text-purple-300 border border-white/10">
-            Système
+      <!-- Bannière Hero -->
+      <section class="relative rounded-[2.25rem] p-7 liquid-glass shadow-2xl group cursor-pointer border border-white/15 active:scale-[0.98] transition-transform duration-300 animate-slideUp" style="animation-delay: 0.2s; opacity: 0;" id="hero-banner">
+        <div class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/5 to-transparent skew-x-[-15deg] animate-shimmer"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/15 via-blue-500/10 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <div class="relative z-10 space-y-3">
+          <span class="inline-block px-3 py-1 text-[11px] font-bold uppercase tracking-wider bg-ios-purple/20 text-purple-300 rounded-full border border-ios-purple/30 backdrop-blur-md shadow-[0_0_15px_rgba(191,90,242,0.3)]">
+            Recommandé • CoverSheet & Siri UI
           </span>
+          <h2 class="text-2xl font-bold tracking-tight text-white drop-shadow-md">LiquidSiri</h2>
+          <p class="text-gray-300 text-xs sm:text-sm leading-relaxed max-w-[90%]">
+            UI Siri iOS 27 pour les anciennes versions d'iOS. Intègre les modules de réfraction, les filtres dynamiques `LGLiveBackdropView` et une gestion de mouvement gyroscopique simulée.
+          </p>
+          <div class="pt-3 flex items-center gap-3">
+            <button id="hero-download-btn" class="bg-white text-black px-5 py-2.5 rounded-full font-bold text-xs hover:scale-105 active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-1.5">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              <span>Télécharger .DEB</span>
+            </button>
+            <span class="text-xs text-gray-400 font-medium">v1.1.2-2 • Stable</span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div class="space-y-2">
-        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Description</h4>
-        <p id="modal-desc" class="text-sm text-gray-200 leading-relaxed">
-          Description détaillée du tweak...
-        </p>
-      </div>
+      <!-- Panneau de préférences interactif -->
+      <section class="glass-card rounded-[2rem] p-6 space-y-5 animate-slideUp" style="animation-delay: 0.25s; opacity: 0;">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-bold text-sm text-white">Activer l'effet dynamique</h3>
+            <p class="text-xs text-gray-400">Simulation de switch style Liquid Glass</p>
+          </div>
+          <div class="ios-switch active" id="demo-switch">
+            <div class="ios-switch-thumb"></div>
+          </div>
+        </div>
+        
+        <!-- Slider Élastique (LGPrefsLiquidSlider) -->
+        <div class="space-y-2 pt-2 border-t border-white/10">
+          <div class="flex justify-between text-xs text-gray-300">
+            <span>Intensité de réfraction</span>
+            <span id="slider-value">1.85</span>
+          </div>
+          
+          <div class="liquid-slider-container" id="liquid-slider">
+            <div class="liquid-slider-track">
+              <div class="liquid-slider-fill" id="slider-fill"></div>
+            </div>
+            <div class="liquid-slider-thumb" id="slider-thumb"></div>
+          </div>
+        </div>
+      </section>
 
-      <!-- Boutons d'action de la modal -->
-      <div class="flex gap-3 pt-2">
-        <button id="close-modal-btn" class="flex-1 py-3.5 rounded-2xl liquid-glass text-sm font-semibold text-gray-300 hover:text-white transition-colors">
-          Fermer
-        </button>
-        <button id="install-btn" class="flex-1 py-3.5 rounded-2xl bg-ios-blue text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/25">
-          <i data-lucide="download" class="w-4 h-4"></i>
-          <span>Télécharger le .DEB</span>
-        </button>
-      </div>
-    </div>
+      <!-- Liste Tweak Unique -->
+      <section class="space-y-4 relative z-20">
+        <div class="flex justify-between items-center px-1 animate-slideUp" style="animation-delay: 0.4s; opacity: 0;">
+          <h3 class="text-lg font-bold tracking-tight">Tweaks Disponibles</h3>
+          <span id="tweak-count" class="text-xs text-gray-400 font-medium">1 élément</span>
+        </div>
+        <div id="tweaks-container" class="space-y-3"></div>
+      </section>
+
+    </main>
   </div>
 
   <!-- ========================================
-       BARRE DE NAVIGATION "LIQUID GLASS" (FLOTTANTE)
+       BARRE DE NAVIGATION AVEC PHYSIQUE LGLiquidMotion
        ======================================== -->
-  <div class="fixed bottom-6 left-0 right-0 z-40 px-5 pointer-events-none">
-    <nav class="pointer-events-auto max-w-md mx-auto h-[68px] liquid-glass-nav rounded-full flex justify-around items-center px-4 shadow-2xl shadow-black/80">
+  <div id="bottom-nav-container" class="fixed bottom-6 left-0 right-0 z-40 px-5 pointer-events-none transition-transform duration-500 cubic-bezier(0.32,0.72,0,1)">
+    <nav class="pointer-events-auto relative max-w-md mx-auto h-[72px] liquid-glass-nav rounded-[2.5rem] flex justify-around items-center px-2">
       
-      <button class="nav-item active flex flex-col items-center justify-center w-14 h-12 text-ios-blue transition-colors" data-tab="home">
-        <i data-lucide="compass" class="w-5 h-5"></i>
-        <span class="text-[10px] font-medium mt-1">Découvrir</span>
+      <!-- Indicateur élastique (Thumb) -->
+      <div id="liquid-indicator" class="liquid-nav-thumb absolute top-[8px] left-0 h-[56px] rounded-[1.75rem] pointer-events-none z-0"></div>
+      
+      <!-- Boutons de navigation -->
+      <button class="nav-item active flex flex-col items-center justify-center w-[4.5rem] h-14 text-white transition-colors duration-300 rounded-2xl active:scale-90 relative z-10 cursor-pointer" data-tab="home">
+        <i data-lucide="compass" class="w-6 h-6 mb-0.5 text-ios-blue drop-shadow-md pointer-events-none"></i>
+        <span class="text-[10px] font-bold pointer-events-none">Découvrir</span>
       </button>
 
-      <button class="nav-item flex flex-col items-center justify-center w-14 h-12 text-gray-400 hover:text-gray-200 transition-colors" data-tab="installed">
-        <i data-lucide="layers" class="w-5 h-5"></i>
-        <span class="text-[10px] font-medium mt-1">Tweaks</span>
+      <button class="nav-item flex flex-col items-center justify-center w-[4.5rem] h-14 text-gray-400 hover:text-gray-200 transition-colors duration-300 rounded-2xl active:scale-90 relative z-10 cursor-pointer" data-tab="installed">
+        <i data-lucide="layers" class="w-6 h-6 mb-0.5 pointer-events-none"></i>
+        <span class="text-[10px] font-bold pointer-events-none">Tweaks</span>
       </button>
 
-      <button class="nav-item flex flex-col items-center justify-center w-14 h-12 text-gray-400 hover:text-gray-200 transition-colors" data-tab="sources">
-        <i data-lucide="git-branch" class="w-5 h-5"></i>
-        <span class="text-[10px] font-medium mt-1">Sources</span>
+      <button class="nav-item flex flex-col items-center justify-center w-[4.5rem] h-14 text-gray-400 hover:text-gray-200 transition-colors duration-300 rounded-2xl active:scale-90 relative z-10 cursor-pointer" data-tab="sources">
+        <i data-lucide="git-branch" class="w-6 h-6 mb-0.5 pointer-events-none"></i>
+        <span class="text-[10px] font-bold pointer-events-none">Sources</span>
       </button>
 
-      <button class="nav-item flex flex-col items-center justify-center w-14 h-12 text-gray-400 hover:text-gray-200 transition-colors" data-tab="settings">
-        <i data-lucide="sliders" class="w-5 h-5"></i>
-        <span class="text-[10px] font-medium mt-1">Réglages</span>
+      <button class="nav-item flex flex-col items-center justify-center w-[4.5rem] h-14 text-gray-400 hover:text-gray-200 transition-colors duration-300 rounded-2xl active:scale-90 relative z-10 cursor-pointer" data-tab="settings">
+        <i data-lucide="sliders" class="w-6 h-6 mb-0.5 pointer-events-none"></i>
+        <span class="text-[10px] font-bold pointer-events-none">Réglages</span>
       </button>
 
     </nav>
   </div>
 
-  <!-- ========================================
-       SCRIPT JAVASCRIPT (GESTION DU TÉLÉCHARGEMENT)
-       ======================================== -->
-  <script>
-    // ------------------------------------------------------------------
-    // 1. LISTE DE VOS TWEAKS AVEC VOTRE LIEN RAW GITHUB COMPLET
-    // ------------------------------------------------------------------
-    const defaultTweaks = [
-      {
-        id: "tweak-1",
-        name: "LiquidSiri",
-        author: "thijs2004 updated arm ttoff999",
-        version: "1.1.2-2",
-        category: "system",
-        icon: "sparkles",
-        gradient: "from-blue-500 to-indigo-600",
-        description: "ui siri ios 27 for old ios",
-        downloadUrl: "https://release-assets.githubusercontent.com/github-production-release-asset/1344539412/63e323e3-f561-4220-a94e-b89868e1ec5a?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-08-28T16%3A43%3A36Z&rscd=attachment%3B+filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-08-28T15%3A42%3A51Z&ske=2026-08-28T16%3A43%3A36Z&sks=b&skv=2018-11-09&sig=XyUYIDkHR3wZMYQRGufIRbBIxMEqdpKBB1tId9ymmB8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NzkzMzcwNywibmJmIjoxNzg3OTMzNDA3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iNvNvcmUud2luZG93cy5uZXQifQ.5ihCRQxi__EgUwPekiOXOWQh3aWeyv9JZkapaMi8bSc&response-content-disposition=attachment%3B%20filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&response-content-type=application%2Foctet-stream"
-      },
-      {
-        id: "tweak-2",
-        name: "PosterBoard Customizer",
-        author: "ttoff999",
-        version: "1.4.2",
-        category: "design",
-        icon: "layout-grid",
-        gradient: "from-purple-500 to-pink-500",
-        description: "Personnalisez l'écran de verrouillage avec des effets de profondeur Liquid Glass.",
-        downloadUrl: "#"
-      }
-    ];
+  <!-- Modal Détaillée (iOS Sheet) -->
+  <div id="detail-modal" class="fixed inset-0 z-50 flex items-end justify-center pointer-events-none transition-all duration-500">
+    <div id="modal-backdrop" class="absolute inset-0 opacity-0 transition-opacity duration-500 cursor-pointer"></div>
+    <div id="modal-content" class="w-full h-[85vh] max-w-xl liquid-glass bg-[#121215]/85 rounded-t-[2.5rem] p-6 pt-3 space-y-6 transform translate-y-full transition-transform duration-500 cubic-bezier(0.32,0.72,0,1) border-t border-white/25 shadow-[0_-15px_60px_rgba(0,0,0,0.9)] relative z-10 flex flex-col pointer-events-auto">
+      <div class="w-14 h-1.5 bg-white/20 rounded-full mx-auto cursor-pointer hover:bg-white/40 transition-colors" id="close-modal-bar"></div>
+      <div class="flex items-start gap-5 pt-3">
+        <div id="modal-icon" class="w-20 h-20 rounded-[1.25rem] bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-lg flex-shrink-0 border border-white/15">
+          <i data-lucide="sparkles" class="w-10 h-10 drop-shadow-md"></i>
+        </div>
+        <div class="flex-1 min-w-0 flex flex-col justify-center h-20">
+          <h2 id="modal-title" class="text-2xl font-bold truncate tracking-tight text-white">LiquidSiri</h2>
+          <p id="modal-author" class="text-sm text-gray-400 truncate mt-0.5">Par thijs2004/ttoff999 • v1.1.2-2 rootful arm</p>
+          <div><span id="modal-tag" class="inline-block mt-2 px-3 py-1 text-[10px] font-bold uppercase rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">Système & CoverSheet</span></div>
+        </div>
+      </div>
+      <div class="w-full h-px bg-white/5 rounded-full"></div>
+      <div class="space-y-3 flex-1 overflow-y-auto no-scrollbar pb-10">
+        <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider pl-1">Description & Spécifications</h4>
+        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+          <p id="modal-desc" class="text-sm text-gray-200 leading-relaxed">
+            UI Siri iOS 27 pour les anciennes versions d'iOS. Intègre les modules de réfraction, les filtres dynamiques `LGLiveBackdropView` et une gestion de mouvement gyroscopique simulée.
+          </p>
+        </div>
+      </div>
+      <div class="flex gap-3 pt-2 mt-auto pb-safe">
+        <button id="close-modal-btn" class="w-1/3 py-4 rounded-2xl bg-white/10 text-sm font-semibold text-white hover:bg-white/20 active:scale-95 transition-all duration-300">Fermer</button>
+        <button id="install-btn" class="w-2/3 py-4 rounded-2xl bg-ios-blue text-white text-sm font-bold flex items-center justify-center gap-2 hover:bg-blue-500 active:scale-95 transition-all duration-300 shadow-[0_0_20px_rgba(10,132,255,0.4)]"><i data-lucide="download" class="w-4 h-4"></i><span>Obtenir .DEB</span></button>
+      </div>
+    </div>
+  </div>
 
+  <script>
+    const defaultTweaks = [
+      { id: "tweak-1", name: "LiquidSiri", author: "thijs2004", version: "1.1.2-2", category: "system", icon: "sparkles", gradient: "from-blue-500 to-indigo-600", description: "UI Siri iOS 27 pour les anciennes versions d'iOS. Mettez à jour l'interface de votre assistant pour un look moderne et fluide avec effets Liquid Glass.", downloadUrl: "https://release-assets.githubusercontent.com/github-production-release-asset/1344539412/63e323e3-f561-4220-a94e-b89868e1ec5a?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-08-28T16%3A43%3A36Z&rscd=attachment%3B+filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-08-28T15%3A42%3A51Z&ske=2026-08-28T16%3A43%3A36Z&sks=b&skv=2018-11-09&sig=XyUYIDkHR3wZMYQRGufIRbBIxMEqdpKBB1tId9ymmB8%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc4NzkzMzcwNywibmJmIjoxNzg3OTMzNDA3LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iNvNvcmUud2luZG93cy5uZXQifQ.5ihCRQxi__EgUwPekiOXOWQh3aWeyv9JZkapaMi8bSc&response-content-disposition=attachment%3B%20filename%3Dcom.votreentreprise.liquidsiri_1.1.2-2%2Bdebug_iphoneos-arm.deb&response-content-type=application%2Foctet-stream" }
+    ];
     let currentTweaks = [...defaultTweaks];
     let selectedTweak = null;
 
-    // ------------------------------------------------------------------
-    // 2. FONCTION POUR DÉCLENCHER LE TÉLÉCHARGEMENT DE FICHIER (.DEB)
-    // ------------------------------------------------------------------
     function triggerDownload(url) {
-      if (!url || url === '#') {
-        alert("Lien de téléchargement non spécifié pour ce tweak.");
-        return;
-      }
-      
-      // Crée un élément lien <a> invisible et simule le clic pour ouvrir/télécharger le RAW
-      const link = document.createElement('a');
-      link.href = url;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      if (!url || url === '#') { alert("Lien non défini."); return; }
+      const link = document.createElement('a'); link.href = url; link.target = '_blank';
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
     }
 
-    // ------------------------------------------------------------------
-    // 3. AFFICHAGE DYNAMIQUE DES TWEAKS & GESTION DU BOUTON "OBTENIR"
-    // ------------------------------------------------------------------
     function renderTweaks(tweaksToRender) {
       const container = document.getElementById('tweaks-container');
       const countEl = document.getElementById('tweak-count');
-      
       container.innerHTML = '';
       countEl.textContent = `${tweaksToRender.length} élément${tweaksToRender.length > 1 ? 's' : ''}`;
-
-      if (tweaksToRender.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-10 text-gray-400 text-sm">
-            Aucun tweak trouvé.
-          </div>
-        `;
-        return;
-      }
-
-      tweaksToRender.forEach(tweak => {
+      
+      tweaksToRender.forEach((tweak, index) => {
         const card = document.createElement('div');
-        card.className = "glass-card rounded-2xl p-4 flex items-center justify-between cursor-pointer group";
-        
+        card.className = "glass-card rounded-2xl p-4 flex items-center justify-between cursor-pointer group animate-slideUp opacity-0";
+        card.style.animationDelay = `${0.5 + (index * 0.1)}s`;
         card.innerHTML = `
-          <div class="flex items-center gap-3.5 flex-1 min-w-0">
-            <div class="w-12 h-12 rounded-xl bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-md flex-shrink-0">
-              <i data-lucide="${tweak.icon || 'package'}" class="w-6 h-6"></i>
+          <div class="flex items-center gap-4 flex-1 min-w-0">
+            <div class="w-14 h-14 rounded-[1rem] bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-lg flex-shrink-0 border border-white/20 group-active:scale-95 transition-transform">
+              <i data-lucide="${tweak.icon || 'package'}" class="w-7 h-7 drop-shadow-md"></i>
             </div>
             <div class="min-w-0 flex-1">
-              <h4 class="font-bold text-sm text-white truncate group-hover:text-ios-blue transition-colors">${tweak.name}</h4>
-              <p class="text-xs text-gray-400 truncate mt-0.5">v${tweak.version} • Par ${tweak.author}</p>
+              <h4 class="font-bold text-sm text-white truncate group-hover:text-ios-blue transition-colors text-lg">${tweak.name}</h4>
+              <p class="text-[11px] text-gray-400 truncate mt-0.5">v${tweak.version} • ${tweak.author}</p>
             </div>
           </div>
-          
-          <button class="download-action-btn ml-3 px-4 py-1.5 rounded-full bg-white/10 text-ios-blue text-xs font-bold border border-white/10 hover:bg-ios-blue hover:text-white transition-all flex-shrink-0 flex items-center gap-1">
-            <i data-lucide="download" class="w-3.5 h-3.5"></i>
-            <span>Obtenir</span>
-          </button>
+          <button class="download-action-btn ml-3 px-5 py-2 rounded-full bg-white/10 text-ios-blue text-xs font-bold border border-white/10 hover:bg-ios-blue hover:text-white active:scale-90 transition-all duration-300 shadow-md">Obtenir</button>
         `;
-
-        // Événement clic sur le bouton "Obtenir" (lance directement le téléchargement)
-        const downloadBtn = card.querySelector('.download-action-btn');
-        downloadBtn.addEventListener('click', (e) => {
-          e.stopPropagation(); // Évite d'ouvrir la fenêtre modale
-          triggerDownload(tweak.downloadUrl);
-        });
-
-        // Événement clic sur le reste de la carte (ouvre la vue détaillée)
+        card.querySelector('.download-action-btn').addEventListener('click', (e) => { e.stopPropagation(); triggerDownload(tweak.downloadUrl); });
         card.addEventListener('click', () => openModal(tweak));
-
         container.appendChild(card);
       });
-
       lucide.createIcons();
     }
 
-    // ------------------------------------------------------------------
-    // 4. GESTION DE LA MODAL & BOUTON D'INSTALLATION
-    // ------------------------------------------------------------------
-    const modal = document.getElementById('detail-modal');
-    const modalContent = modal.querySelector('div');
-    const installBtn = document.getElementById('install-btn');
+    const demoSwitch = document.getElementById('demo-switch');
+    demoSwitch.addEventListener('click', () => {
+      demoSwitch.classList.toggle('active');
+    });
 
-    function openModal(tweak) {
-      selectedTweak = tweak;
-      document.getElementById('modal-title').textContent = tweak.name;
-      document.getElementById('modal-author').textContent = `Par ${tweak.author} • v${tweak.version}`;
-      document.getElementById('modal-desc').textContent = tweak.description;
-      document.getElementById('modal-tag').textContent = tweak.category.toUpperCase();
-      
-      const iconContainer = document.getElementById('modal-icon');
-      iconContainer.className = `w-16 h-16 rounded-2xl bg-gradient-to-br ${tweak.gradient} flex items-center justify-center text-white shadow-lg flex-shrink-0`;
-      iconContainer.innerHTML = `<i data-lucide="${tweak.icon || 'package'}" class="w-8 h-8"></i>`;
-      
-      lucide.createIcons();
+    // Slider Physique (LGPrefsLiquidSlider)
+    const sliderContainer = document.getElementById('liquid-slider');
+    const sliderThumb = document.getElementById('slider-thumb');
+    const sliderFill = document.getElementById('slider-fill');
+    const sliderValueDisplay = document.getElementById('slider-value');
 
-      modal.classList.remove('hidden');
-      setTimeout(() => {
-        modal.classList.remove('opacity-0');
-        modalContent.classList.remove('translate-y-full');
-      }, 10);
+    let sliderValue = 1.85;
+    const minVal = 1.0, maxVal = 3.0;
+
+    function updateSliderUI(val, stretch = 0) {
+      sliderValue = Math.max(minVal, Math.min(maxVal, val));
+      const percent = ((sliderValue - minVal) / (maxVal - minVal)) * 100;
+      
+      sliderFill.style.width = `${percent}%`;
+      sliderThumb.style.left = `${percent}%`;
+      sliderValueDisplay.textContent = sliderValue.toFixed(2);
+
+      const scaleX = 1.0 + Math.abs(stretch) * 0.008;
+      const scaleY = Math.max(0.75, 1.0 - Math.abs(stretch) * 0.004);
+      sliderThumb.style.transform = `translateX(-50%) scale(${scaleX}, ${scaleY})`;
     }
 
-    function closeModal() {
-      modal.classList.add('opacity-0');
-      modalContent.classList.add('translate-y-full');
-      setTimeout(() => {
-        modal.classList.add('hidden');
-      }, 300);
-    }
+    let isDraggingSlider = false;
+    let lastMouseX = 0;
 
-    // Action de téléchargement depuis la modal
-    installBtn.addEventListener('click', () => {
-      if (selectedTweak && selectedTweak.downloadUrl) {
-        triggerDownload(selectedTweak.downloadUrl);
+    sliderThumb.addEventListener('pointerdown', (e) => {
+      isDraggingSlider = true;
+      lastMouseX = e.clientX;
+      sliderThumb.setPointerCapture(e.pointerId);
+      sliderThumb.style.width = '64px';
+    });
+
+    sliderThumb.addEventListener('pointermove', (e) => {
+      if (!isDraggingSlider) return;
+      const rect = sliderContainer.getBoundingClientRect();
+      const deltaX = e.clientX - lastMouseX;
+      lastMouseX = e.clientX;
+
+      const rawX = e.clientX - rect.left;
+      const newPercent = Math.max(0, Math.min(1, rawX / rect.width));
+      const newVal = minVal + newPercent * (maxVal - minVal);
+
+      updateSliderUI(newVal, deltaX);
+    });
+
+    sliderThumb.addEventListener('pointerup', (e) => {
+      isDraggingSlider = false;
+      sliderThumb.style.width = '54px';
+      sliderThumb.style.transform = 'translateX(-50%) scale(1, 1)';
+      if (sliderThumb.hasPointerCapture(e.pointerId)) {
+        sliderThumb.releasePointerCapture(e.pointerId);
       }
     });
 
-    // Événement sur la bannière Hero
+    sliderContainer.addEventListener('click', (e) => {
+      if (e.target === sliderThumb) return;
+      const rect = sliderContainer.getBoundingClientRect();
+      const rawX = e.clientX - rect.left;
+      const newPercent = Math.max(0, Math.min(1, rawX / rect.width));
+      const newVal = minVal + newPercent * (maxVal - minVal);
+      updateSliderUI(newVal, 0);
+    });
+
+    // Modal & Recherche
+    const appContainer = document.getElementById('app-container');
+    const bottomNav = document.getElementById('bottom-nav-container');
+    const modal = document.getElementById('detail-modal');
+    const modalContent = document.getElementById('modal-content');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+
+    function openModal(tweak) {
+      selectedTweak = tweak;
+      modal.classList.remove('pointer-events-none');
+      appContainer.classList.add('app-scaled');
+      bottomNav.classList.add('translate-y-32');
+      requestAnimationFrame(() => {
+        modalBackdrop.classList.add('bg-black/50', 'opacity-100');
+        modalBackdrop.classList.remove('opacity-0');
+        modalContent.classList.remove('translate-y-full');
+      });
+    }
+
+    function closeModal() {
+      modalContent.classList.add('translate-y-full');
+      modalBackdrop.classList.remove('opacity-100', 'bg-black/50');
+      modalBackdrop.classList.add('opacity-0');
+      appContainer.classList.remove('app-scaled');
+      bottomNav.classList.remove('translate-y-32');
+      setTimeout(() => { modal.classList.add('pointer-events-none'); }, 500);
+    }
+
+    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
+    document.getElementById('close-modal-bar').addEventListener('click', closeModal);
+    modalBackdrop.addEventListener('click', closeModal);
+    document.getElementById('install-btn').addEventListener('click', () => {
+      if (selectedTweak) triggerDownload(selectedTweak.downloadUrl);
+    });
     document.getElementById('hero-download-btn').addEventListener('click', (e) => {
       e.stopPropagation();
       triggerDownload(defaultTweaks[0].downloadUrl);
     });
 
-    document.getElementById('close-modal-btn').addEventListener('click', closeModal);
-    document.getElementById('close-modal-bar').addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-      if (e.target === modal) closeModal();
-    });
-
-    // ------------------------------------------------------------------
-    // 5. RECHERCHE & FILTRES
-    // ------------------------------------------------------------------
-    const categoryBtns = document.querySelectorAll('.category-btn');
-    categoryBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        categoryBtns.forEach(b => {
-          b.classList.remove('active', 'bg-white', 'text-black');
-          b.classList.add('liquid-glass', 'text-gray-300');
-        });
-        
-        btn.classList.add('active', 'bg-white', 'text-black');
-        btn.classList.remove('liquid-glass', 'text-gray-300');
-
-        const cat = btn.getAttribute('data-cat');
-        if (cat === 'all') {
-          renderTweaks(currentTweaks);
-        } else {
-          const filtered = currentTweaks.filter(t => t.category === cat);
-          renderTweaks(filtered);
-        }
-      });
-    });
-
-    // Barre de recherche
     const searchBtn = document.getElementById('search-btn');
     const searchContainer = document.getElementById('search-bar-container');
     const searchInput = document.getElementById('search-input');
-
     searchBtn.addEventListener('click', () => {
-      searchContainer.classList.toggle('hidden');
-      if (!searchContainer.classList.contains('hidden')) {
-        searchInput.focus();
+      if (searchContainer.classList.contains('hidden')) {
+        searchContainer.classList.remove('hidden');
+        setTimeout(() => { searchContainer.classList.remove('opacity-0', '-translate-y-4'); searchInput.focus(); }, 10);
+      } else {
+        searchContainer.classList.add('opacity-0', '-translate-y-4');
+        setTimeout(() => { searchContainer.classList.add('hidden'); }, 300);
       }
     });
-
     searchInput.addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const filtered = currentTweaks.filter(t => 
-        t.name.toLowerCase().includes(query) || 
-        t.description.toLowerCase().includes(query) ||
-        t.author.toLowerCase().includes(query)
-      );
-      renderTweaks(filtered);
+      const q = e.target.value.toLowerCase();
+      renderTweaks(currentTweaks.filter(t => t.name.toLowerCase().includes(q) || t.description.toLowerCase().includes(q)));
     });
 
-    // Navigation barre du bas
+    // Tab Bar (LGLiquidMotion)
+    const indicator = document.getElementById('liquid-indicator');
     const navItems = document.querySelectorAll('.nav-item');
+    
+    let currentX = 0, targetX = 0;
+    let currentW = 0, targetW = 0;
+    let velX = 0, velW = 0;
+    const tension = 0.18;
+    const friction = 0.70;
+
+    function animateLiquidThumb() {
+      let forceX = (targetX - currentX) * tension;
+      velX = (velX + forceX) * friction;
+      currentX += velX;
+
+      let forceW = (targetW - currentW) * tension;
+      velW = (velW + forceW) * friction;
+      currentW += velW;
+
+      let velocityStretch = Math.abs(velX) * 0.018;
+      let scaleX = 1.0 + velocityStretch;
+      let scaleY = Math.max(0.7, 1.0 - velocityStretch * 0.5);
+
+      indicator.style.transform = `translateX(${currentX}px) scale(${scaleX}, ${scaleY})`;
+      indicator.style.width = `${currentW}px`;
+
+      requestAnimationFrame(animateLiquidThumb);
+    }
+
+    function setIndicatorTarget(item, immediate = false) {
+      const parentRect = item.parentElement.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      targetX = itemRect.left - parentRect.left;
+      targetW = itemRect.width;
+
+      if (immediate) {
+        currentX = targetX;
+        currentW = targetW;
+      }
+    }
+
     navItems.forEach(item => {
       item.addEventListener('click', () => {
         navItems.forEach(n => {
-          n.classList.remove('text-ios-blue');
+          n.classList.remove('text-white', 'active');
           n.classList.add('text-gray-400');
+          const icon = n.querySelector('i');
+          if (icon) icon.classList.remove('text-ios-blue', 'drop-shadow-md');
         });
-        item.classList.add('text-ios-blue');
+        item.classList.add('text-white', 'active');
         item.classList.remove('text-gray-400');
+        const activeIcon = item.querySelector('i');
+        if (activeIcon) activeIcon.classList.add('text-ios-blue', 'drop-shadow-md');
+        
+        setIndicatorTarget(item);
       });
     });
 
-    // ------------------------------------------------------------------
-    // INITIALISATION
-    // ------------------------------------------------------------------
+    window.addEventListener('resize', () => {
+      const activeItem = document.querySelector('.nav-item.active');
+      if (activeItem) setIndicatorTarget(activeItem, true);
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
       renderTweaks(currentTweaks);
+      const firstItem = document.querySelector('.nav-item.active');
+      if (firstItem) {
+        setIndicatorTarget(firstItem, true);
+        animateLiquidThumb();
+      }
+      updateSliderUI(sliderValue, 0);
     });
   </script>
 </body>
